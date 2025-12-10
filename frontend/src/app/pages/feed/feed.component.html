@@ -1,0 +1,97 @@
+<div class="feed-container">
+  <h2 class="feed-title">Short Video Feed</h2>
+
+  <!-- Upload panel – visible only for creators -->
+  <section class="upload-panel" *ngIf="isCreator">
+    <h3>Upload a new short clip</h3>
+
+    <form (ngSubmit)="onUpload()" #uploadForm="ngForm" class="upload-form">
+      <div class="form-row">
+        <label>Video file</label>
+        <input
+          type="file"
+          accept="video/*"
+          (change)="onFileSelected($event)"
+          required
+        />
+      </div>
+
+      <div class="form-row">
+        <label>Title</label>
+        <input
+          type="text"
+          name="title"
+          [(ngModel)]="newTitle"
+          required
+          placeholder="Give your short a title"
+        />
+      </div>
+
+      <div class="form-row">
+        <label>Description</label>
+        <textarea
+          name="description"
+          [(ngModel)]="newDescription"
+          rows="2"
+          placeholder="(Optional) Describe your short..."
+        ></textarea>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!selectedFile || uploadInProgress"
+      >
+        {{ uploadInProgress ? 'Uploading…' : 'Upload' }}
+      </button>
+    </form>
+
+    <p *ngIf="uploadError" class="msg msg-error">
+      {{ uploadError }}
+    </p>
+    <p *ngIf="uploadSuccess" class="msg msg-success">
+      {{ uploadSuccess }}
+    </p>
+  </section>
+
+  <!-- Optional hint for non-creator users -->
+  <p *ngIf="!isCreator" class="creator-hint">
+    Login as a <b>creator</b> to upload your own videos.
+  </p>
+
+  <hr class="divider" />
+
+  <!-- Feed list -->
+  <div class="video-list">
+    <div class="video-card" *ngFor="let v of videos">
+      <div class="video-frame">
+        <video
+          [src]="v.blobUrl || v.url"
+          controls
+          playsinline
+        ></video>
+      </div>
+
+      <div class="video-meta">
+        <h3>{{ v.title }}</h3>
+        <p class="description">{{ v.description }}</p>
+
+        <div class="meta-footer">
+          <button class="btn btn-like" (click)="like(v)">
+            ❤️ {{ v.likeCount }}
+          </button>
+          <span class="timestamp">
+            {{ v.createdAt | date: 'short' }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="load-more-wrapper">
+    <button class="btn btn-outline" (click)="loadMore()" *ngIf="!loading">
+      Load more
+    </button>
+    <p *ngIf="loading" class="loading-text">Loading more videos…</p>
+  </div>
+</div>

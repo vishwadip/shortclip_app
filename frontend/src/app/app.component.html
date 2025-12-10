@@ -1,0 +1,43 @@
+<!-- src/app/app.component.html -->
+<div class="app-root">
+  <header class="app-header">
+    <div class="app-header-left">
+      <a routerLink="/feed" class="brand">
+        <span class="brand-icon">▶</span>
+        <span class="brand-text">ShortClip</span>
+      </a>
+
+      <nav class="nav-links">
+        <a
+          routerLink="/feed"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Feed
+        </a>
+      </nav>
+    </div>
+
+    <div class="app-header-right">
+      <ng-container *ngIf="auth.currentUser$ | async as user; else loggedOut">
+        <span class="user-info">
+          Logged in as <b>{{ user.username }}</b>
+          <span class="role-pill">{{ user.role }}</span>
+        </span>
+        <button class="btn btn-outline" (click)="auth.logout()">
+          Logout
+        </button>
+      </ng-container>
+
+      <ng-template #loggedOut>
+        <a routerLink="/login" class="btn btn-primary">Login</a>
+      </ng-template>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <div class="content-shell">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
