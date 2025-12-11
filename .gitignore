@@ -21,3 +21,4 @@ Thumbs.db
 /frontend/logs/
 /.metadata/
 backend/.metadata/
+backend/src/main/resources/application.properties
