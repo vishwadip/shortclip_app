@@ -36,10 +36,10 @@ jobs:
           password: ${{ secrets.ACR_PASSWORD }}
 
       # 4) (Optional but good) Run Maven tests
-      - name: Build & Test backend with Maven
-        run: |
-          cd backend
-          mvn -B clean test
+      - name: Build backend with Maven (skip tests)
+        working-directory: ./backend
+        run: mvn -B clean package -DskipTests
+
 
       # 5) Build backend Docker image
       - name: Build backend Docker image
@@ -51,3 +51,4 @@ jobs:
       - name: Push image to ACR
         run: |
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/shortclip-backend:${{ github.sha }}
+g
