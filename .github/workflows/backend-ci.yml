@@ -35,20 +35,20 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      # 4) (Optional but good) Run Maven tests
+      # 4) Build backend with Maven (skip tests)
       - name: Build backend with Maven (skip tests)
         working-directory: ./backend
         run: mvn -B clean package -DskipTests
 
-
-      # 5) Build backend Docker image
+      # 5) Build backend Docker image (from backend/Dockerfile)
       - name: Build backend Docker image
+        working-directory: ./backend
         run: |
-          cd backend
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/shortclip-backend:${{ github.sha }} .
+          docker build \
+            -t ${{ secrets.ACR_LOGIN_SERVER }}/shortclip-backend:${{ github.sha }} \
+            .
 
       # 6) Push image to ACR
       - name: Push image to ACR
         run: |
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/shortclip-backend:${{ github.sha }}
-g
