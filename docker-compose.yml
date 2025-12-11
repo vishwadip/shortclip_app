@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: shortclip_backend:local
+    container_name: shortclip-backend
+    ports:
+      - "8080:8080"
+    # If later you externalise DB/Blob config, you can add:
+    # environment:
+    #   SPRING_DATASOURCE_URL: "jdbc:sqlserver://<server>.database.windows.net:1433;databaseName=shortclip"
+    #   SPRING_DATASOURCE_USERNAME: "<user>"
+    #   SPRING_DATASOURCE_PASSWORD: "<password>"
+    #   AZURE_STORAGE_CONNECTION_STRING: "<conn_string>"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: shortclip_frontend:local
+    container_name: shortclip-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend

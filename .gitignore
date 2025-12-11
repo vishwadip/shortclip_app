@@ -19,3 +19,5 @@ Thumbs.db
 *.log
 /backend/logs/
 /frontend/logs/
+/.metadata/
+backend/.metadata/
